@@ -1,0 +1,44 @@
+name: test_23
+model_type: RealESRNetModel
+scale: 1
+num_gpu: 1  # 根据实际情况设置
+manual_seed: 0
+weight: 1e3
+
+# network structures
+network_g:
+  type: RRDBNet
+  num_in_ch: 3
+  num_out_ch: 3
+  num_feat: 64
+  num_block: 16
+
+# path
+path:
+  pretrain_network_g: /home/user3/project/other/cv/Simple-Align-main/experiments/train_custom_archived_20240529_074651/models/net_g_5000.pth  # 修改为实际的检查点路径
+  strict_load_g: true
+
+# validation settings
+val:
+  save_img: true
+  suffix: ~  # add suffix to saved images, if None, use exp name
+
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr
+      crop_border: 4
+      test_y_channel: false
+
+
+gt_size: 256
+queue_size: 16
+
+datasets:
+  test_mix:
+    name: mix
+    type: PairedImageDataset  # 使用无监督的数据集类型
+    dataroot_gt: /home/user3/project/other/cv/Simple-Align-main/dataset/test
+    dataroot_lq: /home/user3/project/other/cv/Simple-Align-main/dataset/test_GT
+    meta_info: /home/user3/project/other/cv/Simple-Align-main/dataset/test_meta_info.txt
+    io_backend:
+      type: disk

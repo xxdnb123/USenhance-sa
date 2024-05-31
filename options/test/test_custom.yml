@@ -1,0 +1,81 @@
+name: test_5cls_10000
+model_type: RealESRNetModel
+scale: 1
+num_gpu: 1  # 根据实际情况设置
+manual_seed: 0
+weight: 1e3
+
+# network structures
+network_g:
+  type: RRDBNet
+  num_in_ch: 3
+  num_out_ch: 3
+  num_feat: 64
+  num_block: 16
+
+# path
+path:
+  pretrain_network_g: /home/user3/project/other/cv/Simple-Align-main/experiments/train_custom_archived_20240529_074651/models/net_g_latest.pth  # 修改为实际的检查点路径
+  strict_load_g: true
+
+# validation settings
+val:
+  save_img: true
+  suffix: ~  # add suffix to saved images, if None, use exp name
+
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr
+      crop_border: 4
+      test_y_channel: false
+
+
+gt_size: 256
+queue_size: 16
+
+datasets:
+  test_breast:
+    name: breast
+    type: PairedImageDataset  # 使用无监督的数据集类型
+    dataroot_gt: test/breast/gt
+    dataroot_lq: test/breast/lq # 仅包含低质量图像
+    meta_info: test/breast_meta_info.txt
+    io_backend:
+      type: disk
+
+  test_carotid:
+    name: carotid
+    type: PairedImageDataset  # 使用无监督的数据集类型
+    dataroot_gt: test/carotid/gt
+    dataroot_lq: test/carotid/lq # 仅包含低质量图像
+    meta_info: test/carotid_meta_info.txt
+    io_backend:
+      type: disk
+
+
+  test_kidney:
+    name: kidney
+    type: PairedImageDataset  # 使用无监督的数据集类型
+    dataroot_gt: test/kidney/gt
+    dataroot_lq: test/kidney/lq # 仅包含低质量图像
+    meta_info: test/kidney_meta_info.txt
+    io_backend:
+      type: disk
+  
+  test_liver:
+    name: liver
+    type: PairedImageDataset  # 使用无监督的数据集类型
+    dataroot_gt: test/liver/gt
+    dataroot_lq: test/liver/lq # 仅包含低质量图像
+    meta_info: test/liver_meta_info.txt
+    io_backend:
+      type: disk
+  
+  test_thyroid:
+    name: thyroid
+    type: PairedImageDataset  # 使用无监督的数据集类型
+    dataroot_gt: test/thyroid/gt
+    dataroot_lq: test/thyroid/lq # 仅包含低质量图像
+    meta_info: test/thyroid_meta_info.txt
+    io_backend:
+      type: disk
